@@ -7,14 +7,13 @@ parser.add_argument("--get", "--GET", action="store", default = False, help="to 
 parser.add_argument("--set", "--SET",action="store", default = False, help="to set the value for the provided key")
 parser.add_argument("--expire", "--expire",action="store", default = False, help="to get the expiration value for the provided key")
 parser.add_argument("--value","--VALUE", action= "store", help="value")
-parser.add_argument("--zadd","--ZADD", action="store", default=True, help="ZADD key score member")
+parser.add_argument("--zadd","--ZADD", action="store", default=False, help="ZADD [CH] key score member")
 parser.add_argument("--key",  action="store")
 parser.add_argument("--score", action="store")
 parser.add_argument("--member", action="store")
+parser.add_argument("--zrange", action="store")
 
 
-# parser.add_argument("--zrank")
-# parser.add_argument("--zrange")
 arguments = parser.parse_args()
 
 redis = redis.Redis()
@@ -37,19 +36,26 @@ if arguments.get:
     else:
         print("No value in DB")
 
-# if arguments.zadd:
-#     if arguments.key:
-#         if arguments.score:
-#             if arguments.member:
-#                 redis.zadd(arguments.key, arguments.score, arguments.member)
-#                 print("zadd", arguments.key, arguments.score, arguments.member )
-#             else:
-#                 print("provide member for zadd")
-#         else:
-#             print("provide score for zadd")
-#     else:
-#         print("provide the key for zadd")
+if arguments.zadd:
+    if arguments.key:
+        if arguments.score:
+            if arguments.member:
+                # redis.zadd("key",{"value":score}) syntax of zadd for newer update of redis-----------------
+                redis.zadd(arguments.key, { arguments.member : arguments.score})
+                print("zadd", arguments.key, arguments.score, arguments.member )
+            else:
+                print("provide member for zadd")
+        else:
+            print("provide score for zadd")
+    else:
+        print("provide the key for zadd")
         
+if arguments.zrange:
+    if arguments.key:
+        data = redis.zrange(arguments.key, 0, -1)
+        print(data[1:2])
+    else:
+        print("provide the key for zrange")
 
 
 # print(arguments.get, arguments.value, arguments.set)
