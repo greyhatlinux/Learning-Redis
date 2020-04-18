@@ -8,10 +8,13 @@ parser.add_argument("--set", "--SET",action="store", default = False, help="to s
 parser.add_argument("--expire", "--expire",action="store", default = False, help="to get the expiration value for the provided key")
 parser.add_argument("--value","--VALUE", action= "store", help="value")
 parser.add_argument("--zadd","--ZADD", action="store", default=False, help="ZADD [CH] key score member")
+parser.add_argument("--zrank", action="store", default=False)
 parser.add_argument("--key",  action="store")
 parser.add_argument("--score", action="store")
 parser.add_argument("--member", action="store")
 parser.add_argument("--zrange", action="store")
+
+# parser.add_argument("--zrankKey", action="store")
 
 
 arguments = parser.parse_args()
@@ -53,9 +56,20 @@ if arguments.zadd:
 if arguments.zrange:
     if arguments.key:
         data = redis.zrange(arguments.key, 0, -1)
-        print(data[1:2])
+        print(data[:])
     else:
         print("provide the key for zrange")
 
 
-# print(arguments.get, arguments.value, arguments.set)
+if arguments.zrank:
+    if arguments.key:
+        if arguments.member:
+            data = redis.zrank(arguments.key, arguments.member)
+            print(data)
+        else:
+            print("provide member for zrank")
+    else:
+        print("provide the key for zrank")
+
+
+
