@@ -1,8 +1,10 @@
-import json
-import redis
-import argparse
+import json         # to parse json objects
+import redis        # to use redis with python
+import argparse     # for help manual
 
 parser = argparse.ArgumentParser()
+
+# adding help manual ---------------------------------------------------------------------------------------------------------------------
 parser.add_argument("--get", "--GET", action="store", default = False, help="to get the value for the provided key")
 parser.add_argument("--set", "--SET",action="store", default = False, help="to set the value for the provided key")
 parser.add_argument("--expire", "--expire",action="store", default = False, help="to get the expiration value for the provided key")
@@ -14,13 +16,18 @@ parser.add_argument("--score", action="store")
 parser.add_argument("--member", action="store")
 parser.add_argument("--zrange", action="store")
 
-# parser.add_argument("--zrankKey", action="store")
-
-
 arguments = parser.parse_args()
 
 redis = redis.Redis()
 
+# for getting values from redis----------------------------------
+if arguments.get: 
+    if redis.get(arguments.get):
+        print(redis.get(arguments.get).decode("utf-8"))
+    else:
+        print("No value in DB")
+
+# for setting valye in redis--------------------------------------
 if arguments.set:
     if arguments.value:
         if (arguments.expire):
@@ -33,12 +40,7 @@ if arguments.set:
     else:
         print("value not given for the key :", arguments.set) 
         
-if arguments.get: 
-    if redis.get(arguments.get):
-        print(redis.get(arguments.get).decode("utf-8"))
-    else:
-        print("No value in DB")
-
+# for adding to a orered set ---------------------------------------------
 if arguments.zadd:
     if arguments.key:
         if arguments.score:
