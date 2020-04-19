@@ -1,6 +1,6 @@
-import json         # to parse json objects
-import redis        # to use redis with python
-import argparse     # for help manual
+import json         
+import redis      
+import argparse     
 
 parser = argparse.ArgumentParser()
 
@@ -20,7 +20,11 @@ arguments = parser.parse_args()
 
 redis = redis.Redis()
 
-# for getting values from redis----------------------------------
+# for getting va
+# import redis
+
+
+# redis = redis.Redis()lues from redis----------------------------------
 if arguments.get: 
     if redis.get(arguments.get):
         print(redis.get(arguments.get).decode("utf-8"))
