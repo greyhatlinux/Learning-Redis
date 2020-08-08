@@ -1,3 +1,6 @@
+import sys
+sys.path.append('./cmd/')
+
 from style import style
 from db import dbMenu
 from commands import mainMenu
